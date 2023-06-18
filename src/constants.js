@@ -43,7 +43,7 @@ const DOT_COLORS = [
 ]
 const BG_COLOR = 'white'
 
-const MAX_PLAYER_NAME_LENGTH = 3
+const MAX_PLAYER_NAME_LENGTH = 8 // was 3
 const MAX_PLAYER_MSG_LENGTH = 20
 
 const SNAKE_COLLISIONS = true

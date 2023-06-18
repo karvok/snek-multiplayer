@@ -88,6 +88,32 @@ class Game {
     return false
   }
 
+  // This logs to the server console
+  // handlePlayerInput(input, client) {
+  //   const snake = this.snakes.find(s => s.client === client)
+  //   if (!snake) return false
+  //   const dir = input.match(/Move: (.*)/)
+  //   const name = input.match(/Name: (.*)/)
+  //   const say  = input.match(/Say: (.*)/)
+  //   if (dir) {
+  //     return snake.changeDirection(dir[1])
+  //   } else if (name) {
+  //     const playerName = name[1].trim().substring(0, MAX_PLAYER_NAME_LENGTH);
+  //     snake.changeName(playerName);
+  //     // Send a message to the console with the player's name
+  //     console.log(`Player "${playerName}" has joined the game! 😀`);
+  //     return true;
+  //   } else if (say) {
+  //     return snake.setMessage(say[1].trim().substring(0, MAX_PLAYER_MSG_LENGTH))
+  //   }
+  //   try {
+  //     client.write('Huh?\n');
+  //   } catch (e) {
+  //     // nothing to do really.
+  //   }
+  //   return false
+  // }
+
   safeSnakeStartingCoords() {
     let attempts = 0;
 
@@ -133,6 +159,18 @@ class Game {
     const index = this.snakes.findIndex(s => s.client === client)
     if (index >= 0) this.removeSnake(this.snakes[index], index)
   }
+
+  // This logs to the server console
+  // playerLeft(client) {
+  //   const index = this.snakes.findIndex(s => s.client === client)
+  //   if (index >= 0) {
+  //     const snake = this.snakes[index];
+  //     const playerName = snake.name;
+  //     this.removeSnake(snake, index);
+  //     // Send a message to the console with the player's name
+  //     console.log(`Player "${playerName}" has left the game! ☹️`);
+  //   }
+  // }
 
   checkDotHits(position, snake) {
     for (const [i, dot] of this.dots.entries()) {

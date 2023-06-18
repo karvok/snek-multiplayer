@@ -5,6 +5,11 @@ const {
 
 const net = require('net');
 
+// Use snake emoji to represent players remaining
+const snakeEmoji = '🐍';
+let length;
+let snakeString;
+
 /**
  * @class UserInterface
  *
@@ -59,6 +64,23 @@ class RemoteInterface {
     this.clients.push(client)
     this.resetIdleTimer(client, MAX_IDLE_TIMEOUT / 2)
 
+    length = this.clients.length;
+    snakeString = snakeEmoji.repeat(length);
+
+    // Send message to new joiner
+    // Additional spacing used so it displays uniformly in player console
+    client.write(`Welcome new snek fren! 😀    Snakes in the game: ${snakeString}`);
+
+    // Additional spacing used so it displays uniformly in player console
+    const newPlayerMessage = `A new snek fren joined! 😀   Snakes in the game: ${snakeString}`;
+
+    // Broadcast message to all players
+    this.clients.forEach((player) => {
+      if (player !== client) {
+        player.write(newPlayerMessage);
+      }
+    });
+
     if (this.newClientHandler) this.newClientHandler(client)
 
     client.on('data', this.handleClientData.bind(this, client))
@@ -74,6 +96,24 @@ class RemoteInterface {
   handleClientEnded(client) {
     if (client.idleTimer) clearTimeout(client.idleTimer)
     if (this.clientEndHandler) this.clientEndHandler(client)
+
+    // Remove the player from the list of players
+    const index = this.clients.indexOf(client);
+    if (index !== -1) {
+      this.clients.splice(index, 1);
+
+      length = this.clients.length;
+      snakeString = snakeEmoji.repeat(length);
+
+      // Broadcast message to all remaining players
+      // Additional spacing used so it displays uniformly in player console
+      const playerLeftMessage = `A snek fren left! ☹️         Snakes in the game: ${snakeString}`;
+      this.clients.forEach((player) => {
+        if (player !== client) {
+          player.write(playerLeftMessage);
+        }
+      });
+    }
   }
 
   bindHandlers(clientDataHandler, newClientHandler, clientEndHandler) {
